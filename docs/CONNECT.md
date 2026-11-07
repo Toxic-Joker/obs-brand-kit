@@ -54,7 +54,8 @@ If baked art (cam-frame tag, lower third) shows a handle that isn't yours, build
   so that slot size ÷ browser size ≈ the scale your collection used (a chat shown at ~0.5 scale in a
   388×507 slot → 760×1000). Keep your crop for cropped cards (`"crop": [l, t, r, b]`).
 - **Placement keys:** `x`, `y`, `s` (scale), `box` `[w, h]` (scale into it), `fill` (crop to fill the
-  box), `crop`, `mirror`, `hidden`. Vertical `(V)` scenes use the 1080×1920 canvas.
+  box), `crop`, `mirror`, `hidden`. `{"kit": true}` keeps the kit's own placement (alignment and all),
+  the way to keep the kit's backgrounds, panels, frames and socials. Vertical `(V)` scenes use the 1080×1920 canvas.
 - **Expected blanks** in screenshots: widgets that wait for a helper app (Streamer.bot, a now-playing
   bridge) and `localhost` pages whose app isn't running.
 

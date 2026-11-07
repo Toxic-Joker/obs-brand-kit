@@ -50,12 +50,16 @@ class Connect(unittest.TestCase):
         scenes = {s["name"]: s for s in kit["sources"] if s["id"] == "scene"}
         self.cam_scene = next(n for n, s in scenes.items() if (s.get("canvas_uuid") or MAIN) == MAIN
                               and any(i["name"] == "Webcam" for i in s["settings"]["items"]))
+        srcs = {s["name"]: s for s in kit["sources"]}
+        # a piece of the kit's own look in that scene (image or video), kept with {"kit": true}
+        self.kit_item = next(i for i in scenes[self.cam_scene]["settings"]["items"]
+                             if srcs.get(i["name"], {}).get("id") in ("image_source", "ffmpeg_source"))
         self.plan = {"name": "Fake Live", "file": "Fake_Live.json", "source": "Fake Existing", "kit": self.kit,
-                     "assets": os.path.join(self.tmp, "assets"), "keep_kit": [],
+                     "assets": os.path.join(self.tmp, "assets"), "keep_kit": [self.kit_item["name"]],
                      "sources": {"Webcam": {"from": "My Cam", "set": {"muted": True}},
                                  "Alert Box": {"from": "My Alerts"}},
                      "scenes": {self.cam_scene: [["Webcam", {"x": 100, "y": 50, "box": [640, 360], "fill": True, "mirror": True}],
-                                                 ["[S] Alerts", {}]],
+                                                 [self.kit_item["name"], {"kit": True}], ["[S] Alerts", {}]],
                                 "[S] Alerts": [["Alert Box", {"x": 560, "y": 40, "box": [800, 450]}]]}}
 
     def tearDown(self):
@@ -88,6 +92,10 @@ class Connect(unittest.TestCase):
         media = [s["settings"].get("local_file") or s["settings"].get("file") for s in out["sources"]
                  if s["id"] in ("ffmpeg_source", "image_source")]
         self.assertTrue(all(os.path.exists(m) for m in media))
+        kept = S[self.cam_scene]["settings"]["items"][1]                    # {"kit": true}: kit placement as-is
+        for k in ("pos", "scale", "align", "bounds_type", "bounds", "pos_rel"):
+            self.assertEqual(kept.get(k), self.kit_item.get(k), k)
+        self.assertTrue(kept["visible"])
 
     def test_refusals(self):
         r = self.run_tool("obs_connect.py", self.write_plan(file="Fake_Existing.json"), "--replace")

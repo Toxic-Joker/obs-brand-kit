@@ -23,7 +23,7 @@ Plan (paths may be absolute or relative to the plan file):
   }
 }
 Placement keys: x, y, s (scale), box [w,h] (scale into it), fill (crop to fill the box), crop [l,t,r,b],
-mirror (flip horizontally), hidden. Scenes on the kit's vertical canvas use "vertical_canvas" (default [1080,1920]).
+mirror (flip horizontally), hidden; {"kit": true} keeps the kit's own placement of that item. Scenes on the kit's vertical canvas use "vertical_canvas" (default [1080,1920]).
 """
 import copy, json, os, shutil, sys, uuid
 
@@ -132,9 +132,15 @@ def main():
 
     for b, items, v in scenes:
         its = []
+        kit_items = {it["name"]: it for it in b["settings"]["items"]}
         for i, (n, kw) in enumerate(items, 1):
             if n not in srcs and n not in scene_uuid: sys.exit(f"scene {b['name']!r}: unknown item {n!r}")
-            it = item(n, v, **kw); it["id"] = i; its.append(it)
+            if kw.get("kit"):  # the kit's own placement, untouched (alignment, crop, scale and all)
+                if n not in kit_items: sys.exit(f"scene {b['name']!r}: {n!r} has no kit placement to keep")
+                it = copy.deepcopy(kit_items[n]); it["visible"] = not kw.get("hidden", False)
+            else:
+                it = item(n, v, **kw)
+            it["id"] = i; its.append(it)
         b["settings"]["items"], b["settings"]["id_counter"] = its, len(its)
 
     out = copy.deepcopy(kit)
