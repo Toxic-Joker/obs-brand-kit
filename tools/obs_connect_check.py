@@ -39,6 +39,11 @@ aitum_bak = os.path.join(a.out, "vertical-canvas.config.bak")  # holds stream ke
 if os.path.exists(aitum_cfg): shutil.copy2(aitum_cfg, aitum_bak)
 ini = configparser.ConfigParser(strict=False, interpolation=None); ini.read(V.USER_INI, encoding="utf-8-sig")
 prev = ini["Basic"]["SceneCollection"]
+# OBS re-saves the collection it switches back to when it closes: keep a copy to compare (and restore) it.
+prev_file = next((os.path.join(V.SCENES, f) for f in others
+                  if json.load(open(os.path.join(V.SCENES, f), encoding="utf-8")).get("name") == prev), None)
+prev_bak = os.path.join(a.out, "previous-collection.json.bak")  # may hold widget tokens: deleted unless needed
+if prev_file: shutil.copy2(prev_file, prev_bak)
 ws_cfg = json.load(open(os.path.join(V.APPDATA, "obs-studio", "plugin_config", "obs-websocket", "config.json")))
 port, pw = ws_cfg["server_port"], ws_cfg.get("server_password", "")
 
@@ -89,10 +94,20 @@ finally:
         if os.path.exists(p) and proc.poll() is not None: os.remove(p)
 
 changed = [f for f, h in others.items() if not os.path.exists(os.path.join(V.SCENES, f)) or digest(os.path.join(V.SCENES, f)) != h]
+if prev_file and os.path.basename(prev_file) in changed and os.path.exists(prev_bak):
+    old, new = (json.load(open(p, encoding="utf-8")) for p in (prev_bak, prev_file))
+    if old == new:  # same content, only re-written by OBS (key order / formatting)
+        changed.remove(os.path.basename(prev_file)); report["resaved_by_obs"] = os.path.basename(prev_file)
+    else:
+        report["previous_collection_backup"] = prev_bak
+        report["previous_collection_changed_keys"] = sorted(k for k in set(old) | set(new) if old.get(k) != new.get(k))
+if os.path.exists(prev_bak) and "previous_collection_backup" not in report: os.remove(prev_bak)
 report["other_collections_unchanged"] = not changed
 if changed: report["CHANGED"] = changed
 json.dump(report, open(os.path.join(a.out, "report.json"), "w"), indent=1)
-print(json.dumps({k: report.get(k) for k in ("collection", "restored_to", "other_collections_unchanged", "CHANGED", "transition", "inputs")}, indent=1))
+print(json.dumps({k: report.get(k) for k in ("collection", "restored_to", "other_collections_unchanged", "CHANGED",
+                  "resaved_by_obs", "previous_collection_changed_keys", "previous_collection_backup",
+                  "transition", "inputs")}, indent=1))
 print("missing media:", [n for n, m in report.get("media", {}).items() if not m["exists"]])
 print("vertical:", json.dumps(report.get("vertical", {}).get("linked")))
 print("screenshots:", a.out)
