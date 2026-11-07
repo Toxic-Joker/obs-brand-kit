@@ -1,0 +1,63 @@
+{
+  "name": "Cloudberry",
+  "handle": "cloudberrylive",
+  "tagline": "cozy chats & silly games",
+
+  "palette": {
+    "bg":      "#A9C6F6",
+    "bg2":     "#E7A8E6",
+    "surface": "#9A7AD0",
+    "primary": "#E46FD0",
+    "accent":  "#F8C8F4",
+    "outline": "#B8179C",
+    "cloud":   "#FFFFFF",
+    "text":    "#FFFFFF",
+    "muted":   "#F4E8FF"
+  },
+
+  "fonts": {
+    "heading": "Sniglet",
+    "heading_style": "ExtraBold",
+    "body": "Inter",
+    "files": ["fonts/Sniglet-ExtraBold.ttf", "fonts/OFL.txt"]
+  },
+
+  "logo": "logo.svg",
+
+  "socials": [
+    {"platform": "twitch",    "handle": "cloudberrylive"},
+    {"platform": "tiktok",    "handle": "@cloudberry.live"},
+    {"platform": "instagram", "handle": "cloudberry.live"},
+    {"platform": "youtube",   "handle": "@cloudberrylive"}
+  ],
+
+  "style": {
+    "radius": 24,
+    "stroke": 10,
+    "motion": "lively",
+    "background": "sky",
+    "title": "bubble",
+    "frame_glow": true,
+    "screen_logo": false
+  },
+
+  "layout": {
+    "just_chatting": "fullcam",
+    "chat": "floating",
+    "chat_on_screens": true
+  },
+
+  "transition": {"style": "clouds"},
+
+  "text": {
+    "starting_kicker": "The stream will be",
+    "starting": "Starting soon",
+    "starting_sub": "",
+    "brb_kicker": "Hang tight!",
+    "brb": "Be right back",
+    "brb_sub": "",
+    "ending_kicker": "Thanks for watching!",
+    "ending": "Stream is ending",
+    "ending_sub": ""
+  }
+}

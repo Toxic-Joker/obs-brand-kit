@@ -1,0 +1,43 @@
+{
+  "name": "Northwind",
+  "handle": "northwindlive",
+  "tagline": "Chill games, good company",
+
+  "palette": {
+    "bg":      "#0E1116",
+    "surface": "#171B22",
+    "primary": "#5B8DEF",
+    "accent":  "#F2B84B",
+    "text":    "#F3F4F6",
+    "muted":   "#8B93A1"
+  },
+
+  "fonts": {
+    "heading": "Inter",
+    "body": "Inter",
+    "files": []
+  },
+
+  "logo": "logo.svg",
+
+  "socials": [
+    {"platform": "twitch",    "handle": "northwindlive"},
+    {"platform": "youtube",   "handle": "@northwindlive"},
+    {"platform": "x",         "handle": "@northwindlive"},
+    {"platform": "instagram", "handle": "northwind.live"},
+    {"platform": "tiktok",    "handle": "@northwindlive"}
+  ],
+
+  "style": {
+    "radius": 14,
+    "stroke": 3,
+    "motion": "calm"
+  },
+
+  "text": {
+    "starting": "Starting soon",
+    "brb": "Be right back",
+    "ending": "Thanks for watching",
+    "ending_sub": "See you next stream"
+  }
+}
