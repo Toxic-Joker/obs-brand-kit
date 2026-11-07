@@ -172,6 +172,22 @@ them), `logo` (`.svg` or `.png`, or leave it out for a monogram), and up to 6 `s
   in the reference collection on this PC (read at test time, never stored).
 - **Portable:** every file path is relative (`./assets/...`), so the kit works on any PC.
 
+## Connect the tools you already use (optional)
+
+Already streaming with another collection? The connect tools build a **personal** copy of your kit wired
+to the alert box, chat, now-playing, sound alerts, camera, capture card and mics that collection really
+uses, and leave out everything it doesn't:
+
+```bash
+python -I tools/obs_inventory.py list
+python -I tools/obs_inventory.py tools "<your collection>"
+python -I tools/obs_connect.py <your folder>/plan.json
+python tools/obs_connect_check.py "<new collection>" --out <folder>
+```
+
+Your links and tokens go straight into the new collection in OBS, never into this repo, and your old
+collection is only read. Guide and plan format: [`docs/CONNECT.md`](docs/CONNECT.md).
+
 ## Testing in OBS
 
 ```bash

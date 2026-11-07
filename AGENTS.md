@@ -16,5 +16,7 @@ first; `docs/PRD.md` for scope; `docs/ARCHITECTURE.md` for format details.
 
 ## Boundaries
 - Never ship real URLs, tokens, handles or paths from the user's Tokyo Nights collection.
+- Connecting a kit to the streamer's existing tools (`docs/CONNECT.md`): real values go only into the
+  personal collection in OBS's scenes folder; plans hold names and positions; tests use made-up data.
 - Never overwrite an existing OBS scene collection; tests use `OBS Brand Kit TEST - <name>`.
 - Update the docs when a decision in them changes.

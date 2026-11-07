@@ -12,6 +12,8 @@ Python 3 stdlib · EffectCraft CLI (newest `effectcraft-*-portable` under `~/Doc
 - `kit/layout.py` the scene spec (single source of truth for both outputs)
 - `kit/obs.py` OBS JSON · `kit/streamlabs.py` `.overlay` · `kit/check.py` safety checks
 - `kit/__main__.py` CLI: `python -m kit build brands/<slug> [--skip-render]`
+- `tools/obs_inventory.py`, `tools/obs_connect.py`, `tools/obs_connect_check.py`, `tools/leak_scan.py` —
+  connect a built kit to the tools in the streamer's existing collection (`docs/CONNECT.md`)
 - `dist/<slug>/` output (OBS JSON + `assets/` + `fonts/` + `IMPORT.md`), `dist/<slug>.zip`, `dist/<slug>.overlay`
 
 ## Invariants
@@ -28,6 +30,9 @@ Python 3 stdlib · EffectCraft CLI (newest `effectcraft-*-portable` under `~/Doc
 
 ## Don't
 - Don't read, copy or print anything from `%APPDATA%\obs-studio\basic\scenes\Toyko_Nights*` beyond structure.
-- Don't write into `%APPDATA%\obs-studio` except a clearly named test collection, and restore `user.ini`.
+  Sole exception: `tools/obs_connect.py` copies a collection's sources straight into a personal collection in
+  OBS's scenes folder, on the streamer's own PC; it refuses to write inside this repo.
+- Don't write into `%APPDATA%\obs-studio` except a clearly named test collection or a personal collection
+  made by `tools/obs_connect.py`, and restore `user.ini`.
 - Don't use ports 4420–4519 (Windows reserved range). OBS websocket is on 4600.
 - Don't add pip dependencies (GitHub-first + repo-vetting first).
